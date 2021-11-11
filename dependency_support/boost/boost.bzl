@@ -21,7 +21,9 @@ def boost():
     maybe(
         git_repository,
         name = "com_github_nelhage_rules_boost",
-        commit = "1e3a69bf2d5cd10c34b74f066054cd335d033d71",
+        # commit = "7f8b161db3e892289437998a384e1cc5ab11b16c",
+        commit = "fce83babe3f6287bccb45d2df013a309fa3194b8",
+        
         remote = "https://github.com/nelhage/rules_boost",
         shallow_since = "1591047380 -0700",
         patches = [

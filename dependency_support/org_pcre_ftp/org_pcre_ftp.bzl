@@ -22,9 +22,9 @@ def org_pcre_ftp():
         http_archive,
         name = "org_pcre_ftp",
         urls = [
-            "https://ftp.pcre.org/pub/pcre/pcre-8.44.tar.gz",
+            "http://ftp.cs.stanford.edu/pub/exim/pcre/pcre-8.45.zip",
         ],
-        strip_prefix = "pcre-8.44",
-        sha256 = "aecafd4af3bd0f3935721af77b889d9024b2e01d96b58471bd91a3063fb47728",
+        strip_prefix = "pcre-8.45",
+        sha256 = "5b709aa45ea3b8bb73052947200ad187f651a2049158fb5bbfed329e4322a977",
         build_file = Label("//dependency_support:org_pcre_ftp/bundled.BUILD.bazel"),
     )

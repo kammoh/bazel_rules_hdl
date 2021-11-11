@@ -22,9 +22,9 @@ def at_clifford_yosys():
         http_archive,
         name = "at_clifford_yosys",
         urls = [
-            "https://github.com/YosysHQ/yosys/archive/95c60866813e520da48c628d4f98a2fe2cb4db25.zip",
+            "https://github.com/YosysHQ/yosys/archive/224c6f8664dc97e525b1028db9085091bfd31cd5.zip",
         ],
-        strip_prefix = "yosys-95c60866813e520da48c628d4f98a2fe2cb4db25",
-        sha256 = "bdeaabd03db2c90b040edc6c6616b573f7712224a0ff7722c8f6c9cf2d490431",
+        strip_prefix = "yosys-224c6f8664dc97e525b1028db9085091bfd31cd5",
+        sha256 = "d12683862717cfbe7ee8cd05ab9b73c398882947a444d9354d3a613f48671bd2",
         build_file = Label("//dependency_support:at_clifford_yosys/bundled.BUILD.bazel"),
     )

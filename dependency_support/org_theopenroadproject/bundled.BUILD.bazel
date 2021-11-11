@@ -109,7 +109,10 @@ cc_binary(
         "-Wcast-qual",
         "-Wredundant-decls",
         "-Wformat-security",
-        "-fopenmp"
+        "-std=c++17",
+        # "-fopenmp",
+        "-Xclang",
+        "-fopenmp",
     ],
     features = ["-use_header_modules"],
     visibility = ["//visibility:public"],
@@ -132,6 +135,9 @@ cc_library(
             "src/*.cpp",
             #Utility
             "src/utl/src/*.cpp",
+            #odb
+            "src/db/*.cpp",
+            "src/odb/include/odb/*.h",
             #InitFp
             "src/ifp/src/*.cc",
             #GUI Disabled
@@ -209,6 +215,7 @@ cc_library(
             #Root OpenRoad
             "include/ord/*.h",
             "include/ord/*.hh",
+            "src/odb/include/odb/*.h",
             #Utility
             "src/utl/include/utl/*.h",
             #InitFp
@@ -271,10 +278,14 @@ cc_library(
         "-Wcast-qual",
         "-Wredundant-decls",
         "-Wformat-security",
+        "--no-system-header-prefix=db.h",
         "-Iexternal/com_github_quantamhd_lemon",
+        "-std=c++17",
     ],
     features = ["-use_header_modules"],
     includes = [
+        "src/odb/include/odb",
+        "src/mpl/src/ParquetFP/src",
         #Root OpenRoad
         "include",
         #OpenDBTCL
@@ -343,10 +354,11 @@ cc_library(
         "src/stt/include/stt",
     ],
     defines = [
-      "OPENROAD_GIT_DESCRIBE=\\\"bazel_rules_hdl\\\""
+        "OPENROAD_GIT_DESCRIBE=\\\"bazel_rules_hdl\\\"",
     ],
     linkstatic = True,
     deps = [
+        ":MLPart",
         ":ParquetFP",
         ":logger",
         ":munkres",
@@ -406,6 +418,7 @@ cc_library(
         "-Wcast-qual",
         "-Wredundant-decls",
         "-Wformat-security",
+        "-std=c++17",
     ],
     includes = [
         "src/utl/include",
@@ -429,16 +442,50 @@ cc_library(
     copts = [
         "-fexceptions",
         "-Wno-error",
-        "-Wall",
-        "-Wextra",
-        "-pedantic",
-        "-Wcast-qual",
-        "-Wredundant-decls",
-        "-Wformat-security",
+        # "-Wall",
+        # "-Wextra",
+        # "-pedantic",
+        # "-Wcast-qual",
+        # "-Wredundant-decls",
+        # "-Wformat-security",
+        "-std=c++17",
     ],
     features = ["-use_header_modules"],
     includes = [
         "src/mpl/src/ParquetFP/src",
+    ],
+    visibility = ["@org_theopenroadproject//:__subpackages__"],
+)
+
+cc_library(
+    name = "MLPart",
+    srcs = glob(
+        include = [
+            "src/par/src/MLPart/src/*.cpp",
+            "src/par/src/MLPart/mlpart/*.cxx",
+            "src/par/src/MLPart/mlpart/*/*.cxx",
+        ],
+        exclude = [
+            "src/par/src/MLPart/mlpart/Combi/grayPermut.cxx",
+        ],
+    ),
+    hdrs = glob([
+        "src/par/src/MLPart/src/*.h",
+        "src/par/src/MLPart/mlpart/*.h",
+        "src/par/src/MLPart/mlpart/*/*.h",
+        "src/par/src/MLPart/mlpart/*/*.inl",
+        "src/par/src/MLPart/mlpart/*/*.cxx",
+    ]),
+    copts = [
+        "-fexceptions",
+        "-std=c++17",
+    ],
+    features = ["-use_header_modules"],
+    includes = [
+        "src/par/src/MLPart/src",
+        "src/par/src/MLPart/mlpart",
+        "src/par/src/MLPart/mlpart/HGraph",
+        "src/par/src/MLPart/mlpart/ABKCommon",
     ],
     visibility = ["@org_theopenroadproject//:__subpackages__"],
 )
@@ -1000,7 +1047,7 @@ tcl_wrap_cc(
     namespace_prefix = "odb",
     root_swig_src = "src/odb/src/swig/common/odb.i",
     swig_includes = [
-      "src/odb/include",
+        "src/odb/include",
         "src/odb/include/odb",
         "src/odb/src/swig/tcl",
     ],
@@ -1017,6 +1064,7 @@ cc_library(
     name = "opendb_lib",
     srcs = glob([
         "src/odb/src/cdl/*.cpp",
+        "src/odb/include/odb/*.h",
         "src/odb/src/db/*.cpp",
         "src/odb/src/db/*.h",
         "src/odb/src/db/*.hpp",
@@ -1046,9 +1094,10 @@ cc_library(
     copts = [
         "-fexceptions",
         "-Wno-error",
+        "-std=c++17",
     ],
     features = [
-      "-use_header_modules",
+        "-use_header_modules",
     ],
     includes = [
         "src/odb/include",
@@ -1069,6 +1118,7 @@ cc_library(
         "@tk_tcl//:tcl",
         "@net_zlib//:zlib",
         "@boost//:iostreams",
+        "@boost//:endian",
         "@boost//:foreach",
         "@boost//:variant",
         "@boost//:spirit",
@@ -1109,6 +1159,7 @@ cc_library(
     copts = [
         "-fexceptions",
         "-Wno-error",
+        "-std=c++17",
     ],
     features = ["-use_header_modules"],
     includes = [
@@ -1154,6 +1205,7 @@ cc_library(
     copts = [
         "-fexceptions",
         "-Wno-error",
+        "-std=c++17",
     ],
     features = ["-use_header_modules"],
     includes = [
@@ -1404,6 +1456,7 @@ cc_binary(
         "-Wcast-qual",
         "-Wredundant-decls",
         "-Wformat-security",
+        "-std=c++17",
     ],
     features = ["-use_header_modules"],
     includes = [
@@ -1455,9 +1508,9 @@ cc_library(
     ],
     hdrs = glob(
         include = ["src/sta/include/sta/*.hh"],
-    ) + [
-        "src/sta/util/MachineLinux.cc",
-    ],
+    ) + glob(
+        include = ["src/sta/util/Machine*.cc"],
+    ),
     copts = [
         "-fexceptions",
         "-Wno-error",
@@ -1467,6 +1520,7 @@ cc_library(
         "-Wcast-qual",
         "-Wredundant-decls",
         "-Wformat-security",
+        "-std=c++17",
     ],
     features = [
         "-use_header_modules",

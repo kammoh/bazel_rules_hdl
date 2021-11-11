@@ -23,7 +23,7 @@ exports_files(["LICENSE"])
 # The following settings are taken from the command line build when executing
 # configure :
 TCL_COPTS = [
-    "-DHAVE_ZLIB=",  # Enables ZLIB
+    "-DHAVE_ZLIB=1",  # Enables ZLIB
     "-DTCL_DBGX=",
     "-DHAVE_LIMITS_H=1",
     "-DHAVE_UNISTD_H=1",
@@ -40,7 +40,6 @@ TCL_COPTS = [
     "-DHAVE_STRUCT_STAT64=1",
     "-DHAVE_OPEN64=1",
     "-DHAVE_LSEEK64=1",
-    "-DHAVE_TYPE_OFF64_T=1",
     "-DHAVE_GETCWD=1",
     "-DHAVE_OPENDIR=1",
     "-DHAVE_STRSTR=1",
@@ -57,10 +56,10 @@ TCL_COPTS = [
     "-DHAVE_GETGRGID_R=1",
     "-DHAVE_GETGRNAM_R_5=1",
     "-DHAVE_GETGRNAM_R=1",
-    "-DHAVE_GETHOSTBYNAME_R_6=1",
-    "-DHAVE_GETHOSTBYNAME_R=1",
-    "-DHAVE_GETHOSTBYADDR_R_8=1",
-    "-DHAVE_GETHOSTBYADDR_R=1",
+    "-DHAVE_MTSAFE_GETHOSTBYNAME=1",
+    "-DHAVE_MTSAFE_GETHOSTBYADDR=1",
+    "-DHAVE_TERMIOS_H=1",
+    "-DHAVE_STRUCT_STAT_ST_BLKSIZE=1",
     "-DUSE_TERMIOS=1",
     "-DTIME_WITH_SYS_TIME=1",
     "-DHAVE_TM_ZONE=1",
@@ -74,11 +73,25 @@ TCL_COPTS = [
     "-DHAVE_SIGNED_CHAR=1",
     "-DHAVE_LANGINFO=1",
     "-DHAVE_SYS_IOCTL_H=1",
-    "-DTCL_SHLIB_EXT=\\\".so\\\"",
     "-Wno-implicit-int",
     "-fno-strict-aliasing",
     "-fPIC",
-]
+] + select(
+    {
+        "@platforms//os:osx": [
+            "-DHAVE_SYS_STAT_H=1",
+            "-DTCL_SHLIB_EXT=\\\".dylib\\\"",
+        ],
+        "//conditions:default": [
+            "-DHAVE_TYPE_OFF64_T=1",
+            "-DHAVE_GETHOSTBYNAME_R_6=1",
+            "-DHAVE_GETHOSTBYNAME_R=1",
+            "-DHAVE_GETHOSTBYADDR_R_8=1",
+            "-DHAVE_GETHOSTBYADDR_R=1",
+            "-DTCL_SHLIB_EXT=\\\".so\\\"",
+        ],
+    },
+)
 
 # tclAlloc uses additional define
 cc_library(

@@ -22,9 +22,9 @@ def tk_tcl():
         http_archive,
         name = "tk_tcl",
         urls = [
-            "https://prdownloads.sourceforge.net/tcl/tcl8.6.10-src.tar.gz",
+            "https://prdownloads.sourceforge.net/tcl/tcl8.6.12-src.tar.gz",
         ],
-        strip_prefix = "tcl8.6.10",
-        sha256 = "5196dbf6638e3df8d5c87b5815c8c2b758496eb6f0e41446596c9a4e638d87ed",
+        strip_prefix = "tcl8.6.12",
+        sha256 = "26c995dd0f167e48b11961d891ee555f680c175f7173ff8cb829f4ebcde4c1a6",
         build_file = Label("//dependency_support:tk_tcl/bundled.BUILD.bazel"),
     )

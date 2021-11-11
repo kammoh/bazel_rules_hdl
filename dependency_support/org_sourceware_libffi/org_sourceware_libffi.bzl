@@ -22,9 +22,9 @@ def org_sourceware_libffi():
         http_archive,
         name = "org_sourceware_libffi",
         urls = [
-            "https://github.com/libffi/libffi/releases/download/v3.3/libffi-3.3.tar.gz",
+            "https://github.com/libffi/libffi/releases/download/v3.4.2/libffi-3.4.2.tar.gz",
         ],
-        strip_prefix = "libffi-3.3",
-        sha256 = "72fba7922703ddfa7a028d513ac15a85c8d54c8d67f55fa5a4802885dc652056",
+        strip_prefix = "libffi-3.4.2",
+        sha256 = "540fb721619a6aba3bdeef7d940d8e9e0e6d2c193595bc243241b77ff9e93620",
         build_file = Label("//dependency_support:org_sourceware_libffi/bundled.BUILD.bazel"),
     )

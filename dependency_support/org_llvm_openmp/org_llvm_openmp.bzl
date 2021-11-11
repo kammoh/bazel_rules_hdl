@@ -22,9 +22,9 @@ def org_llvm_openmp():
         http_archive,
         name = "org_llvm_openmp",
         urls = [
-            "https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.1/openmp-10.0.1.src.tar.xz",
+            "https://github.com/llvm/llvm-project/releases/download/llvmorg-13.0.0/openmp-13.0.0.src.tar.xz",
         ],
-        strip_prefix = "openmp-10.0.1.src",
-        sha256 = "d19f728c8e04fb1e94566c8d76aef50ec926cd2f95ef3bf1e0a5de4909b28b44",
+        strip_prefix = "openmp-13.0.0.src",
+        sha256 = "4930ae7a1829a53b698255c2c6b6ee977cc364b37450c14ee458793c0d5e493c",
         build_file = Label("//dependency_support/org_llvm_openmp:bundled.BUILD.bazel"),
     )
