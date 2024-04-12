@@ -27,6 +27,12 @@ def vpi_binary(name, out, srcs, **kwargs):
         name = cc_target,
         srcs = srcs,
         linkshared = 1,
+        linkopts = select({
+            "@bazel_tools//src/conditions:darwin": [
+                "-undefined dynamic_lookup",
+            ],
+            "//conditions:default": []
+        }),
         **kwargs
     )
 

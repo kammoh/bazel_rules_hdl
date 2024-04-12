@@ -25,10 +25,11 @@ http_archive(
 )
 
 http_archive(
-    name = "com_grail_bazel_toolchain",
-    sha256 = "ddad1bde0eb9d470ea58500681a7deacdf55c714adf4b89271392c4687acb425",
-    strip_prefix = "toolchains_llvm-7e7c7cf1f965f348861085183d79b6a241764390",
-    urls = ["https://github.com/grailbio/bazel-toolchain/archive/7e7c7cf1f965f348861085183d79b6a241764390.tar.gz"],
+    name = "toolchains_llvm",
+    sha256 = "b7cd301ef7b0ece28d20d3e778697a5e3b81828393150bed04838c0c52963a01",
+    strip_prefix = "toolchains_llvm-0.10.3",
+    canonical_id = "0.10.3",
+    url = "https://github.com/grailbio/bazel-toolchain/releases/download/0.10.3/toolchains_llvm-0.10.3.tar.gz",
 )
 
 http_archive(
@@ -40,19 +41,35 @@ http_archive(
     ],
 )
 
+load("@toolchains_llvm//toolchain:deps.bzl", "bazel_toolchain_dependencies")
+
+bazel_toolchain_dependencies()
+
+load("@toolchains_llvm//toolchain:rules.bzl", "llvm_toolchain")
+
+llvm_toolchain(
+    name = "llvm_toolchain",
+    llvm_version = "16.0.0",
+)
+
+load("@llvm_toolchain//:toolchains.bzl", "llvm_register_toolchains")
+
+llvm_register_toolchains()
+
 load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 
 bazel_skylib_workspace()
 
+rules_python_version = "0.31.0"
 maybe(
     http_archive,
     name = "rules_python",
-    sha256 = "5868e73107a8e85d8f323806e60cad7283f34b32163ea6ff1020cf27abef6036",
-    strip_prefix = "rules_python-0.25.0",
-    url = "https://github.com/bazelbuild/rules_python/releases/download/0.25.0/rules_python-0.25.0.tar.gz",
+    integrity = "sha256-xovcT77CXeW1STuIGc/Id8TqKZwNyxXCRMWgAgjN4xE=",
+    strip_prefix = "rules_python-%s" % (rules_python_version,),
+    url = "https://github.com/bazelbuild/rules_python/releases/download/%s/rules_python-%s.tar.gz" % (rules_python_version, rules_python_version)
 )
 
-load("@rules_python//python:repositories.bzl", "python_register_toolchains")
+load("@rules_python//python:repositories.bzl", "python_register_toolchains", "py_repositories")
 
 python_register_toolchains(
     name = "python39",
@@ -62,6 +79,8 @@ python_register_toolchains(
     ignore_root_user_error = True,
     python_version = "3.9",
 )
+
+py_repositories()
 
 # This sysroot is used by github.com/vsco/bazel-toolchains.
 # Disabled for now waiting on https://github.com/pybind/pybind11_bazel/pull/29
@@ -80,36 +99,36 @@ python_register_toolchains(
 #     urls = ["https://commondatastorage.googleapis.com/chrome-linux-sysroot/toolchain/3c248ba4290a5ad07085b7af07e6785bf1ae5b66/debian_stretch_amd64_sysroot.tar.xz"],
 # )
 
-load("@com_grail_bazel_toolchain//toolchain:deps.bzl", "bazel_toolchain_dependencies")
+# load("@com_grail_bazel_toolchain//toolchain:deps.bzl", "bazel_toolchain_dependencies")
 
-bazel_toolchain_dependencies()
+# bazel_toolchain_dependencies()
 
-load("@com_grail_bazel_toolchain//toolchain:rules.bzl", "llvm_toolchain")
+# load("@com_grail_bazel_toolchain//toolchain:rules.bzl", "llvm_toolchain")
 
-llvm_toolchain(
-    name = "llvm_toolchain",
-    llvm_version = "10.0.1",
-    sha256 = {
-        "linux": "02a73cfa031dfe073ba8d6c608baf795aa2ddc78eed1b3e08f3739b803545046",
-    },
-    strip_prefix = {
-        "linux": "clang+llvm-10.0.1-x86_64-pc-linux-gnu",
-    },
-    urls = {
-        "linux": [
-            # Use a custom built Clang+LLVM binrary distribution that is more portable than
-            # the official builds because it's built against an older glibc and does not have
-            # dynamic library dependencies to tinfo, gcc_s or stdlibc++.
-            #
-            # For more details, see the files under toolchains/clang.
-            "https://github.com/retone/deps/releases/download/na5/clang+llvm-10.0.1-x86_64-pc-linux-gnu.tar.xz",
-        ],
-    },
-    # Disabled for now waiting on https://github.com/pybind/pybind11_bazel/pull/29
-    # sysroot = {
-    #     "linux": "@org_chromium_sysroot_linux_x64//:sysroot",
-    # },
-)
+# llvm_toolchain(
+#     name = "llvm_toolchain",
+#     llvm_version = "10.0.1",
+#     sha256 = {
+#         "linux": "02a73cfa031dfe073ba8d6c608baf795aa2ddc78eed1b3e08f3739b803545046",
+#     },
+#     strip_prefix = {
+#         "linux": "clang+llvm-10.0.1-x86_64-pc-linux-gnu",
+#     },
+#     urls = {
+#         "linux": [
+#             # Use a custom built Clang+LLVM binrary distribution that is more portable than
+#             # the official builds because it's built against an older glibc and does not have
+#             # dynamic library dependencies to tinfo, gcc_s or stdlibc++.
+#             #
+#             # For more details, see the files under toolchains/clang.
+#             "https://github.com/retone/deps/releases/download/na5/clang+llvm-10.0.1-x86_64-pc-linux-gnu.tar.xz",
+#         ],
+#     },
+#     # Disabled for now waiting on https://github.com/pybind/pybind11_bazel/pull/29
+#     # sysroot = {
+#     #     "linux": "@org_chromium_sysroot_linux_x64//:sysroot",
+#     # },
+# )
 
 maybe(
     http_archive,
